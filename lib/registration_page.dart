@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class RegistrationPage extends StatefulWidget {
   const RegistrationPage({super.key});
@@ -11,6 +12,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _storage = FlutterSecureStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -61,8 +63,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
               const SizedBox(height: 24),
               Center(
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
+                      await _storage.write(key: 'email', value: _emailController.text);
+                      await _storage.write(key: 'password', value: _passwordController.text);
+
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Регистрация успешна')),
                       );
