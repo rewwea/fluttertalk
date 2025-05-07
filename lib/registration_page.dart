@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'database_helper.dart';
+import 'login_page.dart';
 
 class RegistrationPage extends StatefulWidget {
   const RegistrationPage({super.key});
@@ -13,6 +15,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _storage = FlutterSecureStorage();
+  final dbHelper = DatabaseHelper();
 
   @override
   Widget build(BuildContext context) {
@@ -64,15 +67,28 @@ class _RegistrationPageState extends State<RegistrationPage> {
               Center(
                 child: ElevatedButton(
                   onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      await _storage.write(key: 'email', value: _emailController.text);
-                      await _storage.write(key: 'password', value: _passwordController.text);
+                      if (_formKey.currentState!.validate()) {
+                        try {
+                          await dbHelper.insertUser(
+                            _emailController.text,
+                            _passwordController.text,
+                          );
 
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Регистрация успешна')),
-                      );
-                    }
-                  },
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Пользователь зарегистрирован')),
+                          );
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => LoginPage()),
+                          );
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Ошибка: возможно, пользователь уже существует')),
+                          );
+                        }
+                      }
+                    },
                   child: const Text('Зарегистрироваться'),
                 ),
               ),
