@@ -74,6 +74,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             _passwordController.text,
                           );
 
+                          await _storage.write(key: 'user_email', value: _emailController.text);
+
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('Пользователь зарегистрирован')),
                           );

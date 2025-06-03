@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 import 'database_helper.dart';
 import 'home_page.dart';
 
@@ -8,6 +9,8 @@ class LoginPage extends StatelessWidget {
   final _passwordController = TextEditingController();
   final _storage = FlutterSecureStorage();
   final dbHelper = DatabaseHelper();
+
+  LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {

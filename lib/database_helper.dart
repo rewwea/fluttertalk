@@ -1,5 +1,5 @@
-import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
@@ -18,7 +18,7 @@ class DatabaseHelper {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, 'users.db');
 
-    return await openDatabase(  
+    return await openDatabase(
       path,
       version: 1,
       onCreate: (db, version) async {
@@ -35,10 +35,7 @@ class DatabaseHelper {
 
   Future<int> insertUser(String email, String password) async {
     final db = await database;
-    return await db.insert('users', {
-      'email': email,
-      'password': password,
-    });
+    return await db.insert('users', {'email': email, 'password': password});
   }
 
   Future<Map<String, dynamic>?> getUser(String email) async {
